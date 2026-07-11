@@ -1,6 +1,6 @@
 {
-  "name": "MMOMon",
-  "short_name": "MMOMon",
+  "name": "MMOMON",
+  "short_name": "MMOMON",
   "description": "A community-built online monster adventure in one shared world.",
   "start_url": "/",
   "display": "standalone",
