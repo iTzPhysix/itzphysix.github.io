@@ -28,6 +28,13 @@
   <link rel="icon" type="image/svg+xml" href="assets/mmomon-logo.svg?v=4">
   <link rel="manifest" href="site.webmanifest">
   <link rel="preload" href="assets/mmomon-logo.svg?v=4" as="image" type="image/svg+xml" fetchpriority="high">
+  <script>
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    addEventListener('pageshow', () => {
+      const navigation = performance.getEntriesByType?.('navigation')[0];
+      if (!navigation || navigation.type === 'reload') scrollTo(0, 0);
+    }, { once: true });
+  </script>
   <style>
     :root{--bg:#070516;--panel:#15103a;--line:rgba(157,120,255,.2);--line2:rgba(145,86,255,.46);--text:#f7f5ff;--muted:#aaa1c8;--muted2:#776e94;--violet:#a058ff;--cyan:#42dcff;--max:1180px;--shadow:0 28px 80px rgba(0,0,0,.42)}
     *{box-sizing:border-box}
@@ -56,7 +63,7 @@
   <a class="skip" href="#main">Skip to content</a>
   <header>
     <div class="nav">
-      <a class="brand" href="#roadmap" aria-label="MMOMON home">
+      <a class="brand" href="/" aria-label="MMOMON home">
         <img src="assets/mmomon-logo.svg?v=4" alt="" width="44" height="44" fetchpriority="high" decoding="async">
         <span>MMO<span>MON</span></span>
       </a>
@@ -98,7 +105,7 @@
 
   <footer>
     <div class="shell footer-main">
-      <a class="brand" href="#roadmap" aria-label="MMOMON home"><img src="assets/mmomon-logo.svg?v=4" alt="" width="40" height="40" loading="lazy" decoding="async"><span>MMO<span>MON</span></span></a>
+      <a class="brand" href="/" aria-label="MMOMON home"><img src="assets/mmomon-logo.svg?v=4" alt="" width="40" height="40" loading="lazy" decoding="async"><span>MMO<span>MON</span></span></a>
       <p>Independent community project. Currently in active development.</p>
     </div>
     <div class="shell footer-bottom"><span>© MMOMON. All rights reserved.</span><span>mmomon.com</span></div>
