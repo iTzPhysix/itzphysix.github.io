@@ -30,6 +30,44 @@
   <link rel="manifest" href="site.webmanifest">
   <script>document.documentElement.classList.add('js')</script>
   <link rel="stylesheet" href="styles.css?v=3">
+  <style>
+    .nav-shell { grid-template-columns: 1fr auto; }
+    .discord-top-link {
+      position: relative;
+      display: grid;
+      place-items: center;
+      justify-self: end;
+      width: 50px;
+      height: 50px;
+      border: 1px solid rgba(180, 145, 255, .42);
+      border-radius: 16px;
+      color: #fff;
+      background: linear-gradient(145deg, rgba(106, 70, 255, .34), rgba(67, 37, 151, .25));
+      box-shadow: 0 0 18px rgba(125, 60, 255, .44), 0 0 42px rgba(125, 60, 255, .24), inset 0 0 18px rgba(170, 130, 255, .12);
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .discord-top-link::before {
+      content: "";
+      position: absolute;
+      inset: 7px;
+      border-radius: 11px;
+      background: radial-gradient(circle, rgba(144, 104, 255, .28), transparent 68%);
+      pointer-events: none;
+    }
+    .discord-top-link svg { position: relative; width: 27px; height: 27px; }
+    .discord-top-link:hover,
+    .discord-top-link:focus-visible {
+      transform: translateY(-2px) scale(1.04);
+      border-color: rgba(206, 184, 255, .75);
+      background: linear-gradient(145deg, rgba(125, 82, 255, .5), rgba(77, 41, 171, .34));
+      box-shadow: 0 0 24px rgba(137, 79, 255, .7), 0 0 58px rgba(103, 55, 230, .38), inset 0 0 20px rgba(190, 155, 255, .18);
+      outline: none;
+    }
+    @media (max-width: 720px) {
+      .discord-top-link { width: 46px; height: 46px; border-radius: 14px; }
+      .discord-top-link svg { width: 25px; height: 25px; }
+    }
+  </style>
   <script defer src="script.js?v=3"></script>
 </head>
 <body>
@@ -46,19 +84,10 @@
         <span>MMO<span>MON</span></span>
       </a>
 
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" data-nav-toggle>
-        <span class="sr-only">Open navigation</span>
-        <span></span><span></span><span></span>
-      </button>
-
-      <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation" data-nav>
-        <a href="#roadmap">Roadmap</a>
-        <a href="https://discord.gg/US7TzSAjag" target="_blank" rel="noopener noreferrer">Discord</a>
-      </nav>
-
-      <a class="button button-small nav-cta" href="https://discord.gg/US7TzSAjag" target="_blank" rel="noopener noreferrer">
-        <span>Join Discord</span>
-        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4"/></svg>
+      <a class="discord-top-link" href="https://discord.gg/US7TzSAjag" target="_blank" rel="noopener noreferrer" aria-label="Join MMOMON on Discord" title="Join MMOMON on Discord">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M20.317 4.37a19.8 19.8 0 0 0-4.885-1.515c-.212.375-.46.882-.63 1.267a18.27 18.27 0 0 0-5.601 0 12.6 12.6 0 0 0-.64-1.267A19.74 19.74 0 0 0 3.677 4.37C.588 8.958-.247 13.434.171 17.847a19.9 19.9 0 0 0 5.993 3.03c.48-.655.91-1.35 1.28-2.08a12.9 12.9 0 0 1-2.018-.966c.17-.124.336-.253.497-.387 3.892 1.797 8.112 1.797 11.958 0 .162.134.328.263.497.387-.64.378-1.315.702-2.02.967.37.728.798 1.423 1.28 2.079a19.85 19.85 0 0 0 5.993-3.03c.49-5.113-.838-9.548-3.314-13.477ZM8.02 15.18c-1.17 0-2.126-1.08-2.126-2.405 0-1.326.936-2.406 2.126-2.406 1.2 0 2.145 1.09 2.126 2.406 0 1.325-.936 2.405-2.126 2.405Zm7.974 0c-1.17 0-2.126-1.08-2.126-2.405 0-1.326.936-2.406 2.126-2.406 1.2 0 2.145 1.09 2.126 2.406 0 1.325-.936 2.405-2.126 2.405Z"/>
+        </svg>
       </a>
     </div>
   </header>
@@ -124,9 +153,7 @@
       </a>
       <p>Independent community project. Currently in active development.</p>
       <div class="footer-links">
-        <a href="#roadmap">Roadmap</a>
         <a href="https://discord.gg/US7TzSAjag" target="_blank" rel="noopener noreferrer">Discord</a>
-        <a href="mailto:hello@mmomon.com">Contact</a>
       </div>
     </div>
     <div class="section-shell footer-bottom">
