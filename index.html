@@ -63,9 +63,12 @@
       box-shadow: 0 0 24px rgba(137, 79, 255, .7), 0 0 58px rgba(103, 55, 230, .38), inset 0 0 20px rgba(190, 155, 255, .18);
       outline: none;
     }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .footer-grid > p { text-align: right; }
     @media (max-width: 720px) {
       .discord-top-link { width: 46px; height: 46px; border-radius: 14px; }
       .discord-top-link svg { width: 25px; height: 25px; }
+      .footer-grid > p { text-align: center; }
     }
   </style>
   <script defer src="script.js?v=3"></script>
@@ -152,9 +155,6 @@
         <span>MMO<span>MON</span></span>
       </a>
       <p>Independent community project. Currently in active development.</p>
-      <div class="footer-links">
-        <a href="https://discord.gg/US7TzSAjag" target="_blank" rel="noopener noreferrer">Discord</a>
-      </div>
     </div>
     <div class="section-shell footer-bottom">
       <span>© <span data-year></span> MMOMON. All rights reserved.</span>
