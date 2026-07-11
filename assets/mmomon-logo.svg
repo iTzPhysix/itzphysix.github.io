@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">MMOMon logo</title>
+  <desc id="desc">A white segmented capture emblem on a deep violet circle.</desc>
+  <circle cx="256" cy="256" r="250" fill="#12004a"/>
+  <g fill="none" stroke="#fff" stroke-width="31" stroke-linecap="butt">
+    <path d="M104 100A218 218 0 0 1 408 102"/>
+    <path d="M83 124A218 218 0 0 0 80 212"/>
+    <path d="M429 126A218 218 0 0 1 432 212"/>
+    <path d="M101 410A218 218 0 0 0 411 411"/>
+    <path d="M82 300A218 218 0 0 0 103 389"/>
+    <path d="M430 300A218 218 0 0 1 409 389"/>
+  </g>
+  <rect x="59" y="243" width="394" height="28" fill="#fff"/>
+  <circle cx="256" cy="257" r="45" fill="#12004a" stroke="#fff" stroke-width="17"/>
+  <circle cx="256" cy="257" r="20" fill="#fff"/>
+</svg>

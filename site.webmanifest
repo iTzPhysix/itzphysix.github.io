@@ -1,0 +1,17 @@
+{
+  "name": "MMOMon",
+  "short_name": "MMOMon",
+  "description": "A community-built online monster adventure in one shared world.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#070516",
+  "theme_color": "#09061d",
+  "icons": [
+    {
+      "src": "/assets/mmomon-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
