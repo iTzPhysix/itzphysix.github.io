@@ -6,28 +6,91 @@
   <meta name="theme-color" content="#09061d">
   <meta name="color-scheme" content="dark">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta name="robots" content="index,follow">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+  <meta name="googlebot" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
   <meta name="application-name" content="MMOmon">
   <meta name="apple-mobile-web-app-title" content="MMOmon">
-  <meta name="description" content="MMOmon is a community-built online monster adventure set in one shared, living world.">
+  <meta name="author" content="MMOmon">
+  <meta name="description" content="MMOmon is a community-built online monster MMO in active development, featuring a persistent shared world, player progression, trading, battles, and expanding regions.">
+
+  <meta property="og:locale" content="en_US">
   <meta property="og:site_name" content="MMOmon">
-  <meta property="og:title" content="MMOmon — Adventure, Together">
-  <meta property="og:description" content="Follow MMOmon development and help shape a shared online world.">
+  <meta property="og:title" content="MMOmon | Online Monster MMO & Shared World Adventure">
+  <meta property="og:description" content="Explore MMOmon's development roadmap and join a community building a persistent online monster world with progression, trading, battles, and expanding regions.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mmomon.com/">
-  <meta property="og:image" content="https://mmomon.com/assets/mmomon-logo.svg">
-  <meta property="og:image:alt" content="MMOmon logo">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="MMOmon — Adventure, Together">
-  <meta name="twitter:description" content="Follow MMOmon development and help shape a shared online world.">
-  <meta name="twitter:image" content="https://mmomon.com/assets/mmomon-logo.svg">
-  <title>MMOmon — Adventure, Together</title>
+  <meta property="og:image" content="https://mmomon.com/assets/mmomon-social-card.png">
+  <meta property="og:image:secure_url" content="https://mmomon.com/assets/mmomon-social-card.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="MMOmon — a shared online monster adventure">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MMOmon | Online Monster MMO & Shared World Adventure">
+  <meta name="twitter:description" content="Follow MMOmon's development and help shape a persistent shared online monster world.">
+  <meta name="twitter:image" content="https://mmomon.com/assets/mmomon-social-card.png">
+  <meta name="twitter:image:alt" content="MMOmon — a shared online monster adventure">
+
+  <title>MMOmon | Online Monster MMO & Shared World Adventure</title>
   <link rel="canonical" href="https://mmomon.com/">
+  <link rel="sitemap" type="application/xml" href="https://mmomon.com/sitemap.xml">
   <link rel="icon" type="image/x-icon" href="favicon.ico?v=258" sizes="256x256">
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico?v=258">
   <link rel="icon" type="image/svg+xml" href="assets/mmomon-logo.svg?v=4">
   <link rel="manifest" href="site.webmanifest">
   <link rel="preload" href="assets/mmomon-logo.svg?v=4" as="image" type="image/svg+xml" fetchpriority="high">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://mmomon.com/#organization",
+        "name": "MMOmon",
+        "url": "https://mmomon.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://mmomon.com/assets/mmomon-logo.svg",
+          "width": 103,
+          "height": 103
+        },
+        "sameAs": [
+          "https://discord.gg/US7TzSAjag"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://mmomon.com/#website",
+        "url": "https://mmomon.com/",
+        "name": "MMOmon",
+        "alternateName": "MMOmon Online Monster MMO",
+        "description": "A community-built online monster MMO in active development.",
+        "publisher": { "@id": "https://mmomon.com/#organization" },
+        "inLanguage": "en-US"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://mmomon.com/#webpage",
+        "url": "https://mmomon.com/",
+        "name": "MMOmon | Online Monster MMO & Shared World Adventure",
+        "description": "MMOmon is a community-built online monster MMO featuring a persistent shared world, player progression, trading, battles, and expanding regions.",
+        "isPartOf": { "@id": "https://mmomon.com/#website" },
+        "about": { "@id": "https://mmomon.com/#organization" },
+        "primaryImageOfPage": {
+          "@type": "ImageObject",
+          "url": "https://mmomon.com/assets/mmomon-social-card.png",
+          "width": 1200,
+          "height": 630
+        },
+        "dateModified": "2026-07-11",
+        "inLanguage": "en-US"
+      }
+    ]
+  }
+  </script>
+
   <script>
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     addEventListener('pageshow', () => {
@@ -67,7 +130,7 @@
         <img src="assets/mmomon-logo.svg?v=4" alt="" width="44" height="44" fetchpriority="high" decoding="async">
         <span>MMO<span>mon</span></span>
       </a>
-      <a class="discord" href="https://discord.gg/US7TzSAjag" target="_blank" rel="noopener noreferrer" aria-label="Join MMOmon on Discord" title="Join MMOmon on Discord">
+      <a class="discord" href="https://discord.gg/US7TzSAjag" target="_blank" rel="me noopener noreferrer" aria-label="Join MMOmon on Discord" title="Join MMOmon on Discord">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.317 4.37a19.8 19.8 0 0 0-4.885-1.515c-.212.375-.46.882-.63 1.267a18.27 18.27 0 0 0-5.601 0 12.6 12.6 0 0 0-.64-1.267A19.74 19.74 0 0 0 3.677 4.37C.588 8.958-.247 13.434.171 17.847a19.9 19.9 0 0 0 5.993 3.03c.48-.655.91-1.35 1.28-2.08a12.9 12.9 0 0 1-2.018-.966c.17-.124.336-.253.497-.387 3.892 1.797 8.112 1.797 11.958 0 .162.134.328.263.497.387-.64.378-1.315.702-2.02.967.37.728.798 1.423 1.28 2.079a19.85 19.85 0 0 0 5.993-3.03c.49-5.113-.838-9.548-3.314-13.477ZM8.02 15.18c-1.17 0-2.126-1.08-2.126-2.405 0-1.326.936-2.406 2.126-2.406 1.2 0 2.145 1.09 2.126 2.406 0 1.325-.936 2.405-2.126 2.405Zm7.974 0c-1.17 0-2.126-1.08-2.126-2.405 0-1.326.936-2.406 2.126-2.406 1.2 0 2.145 1.09 2.126 2.406 0 1.325-.936 2.405-2.126 2.405Z"/></svg>
       </a>
     </div>
@@ -77,9 +140,9 @@
     <section class="section" id="roadmap">
       <div class="shell roadmap">
         <div class="copy">
-          <p class="eyebrow">Development roadmap</p>
+          <p class="eyebrow">MMOmon development roadmap</p>
           <h1>Building the foundation before opening the gates.</h1>
-          <p>The current priority is a stable, accurate world client. Multiplayer systems, player identity, battles, and live services follow on top of that foundation.</p>
+          <p>MMOmon is a community-built online monster MMO in active development. The current priority is a stable shared-world client; player identity, trading, battles, progression, and live services will build on that foundation.</p>
           <div class="notice"><i></i><p>Roadmap labels describe development focus and do not promise release dates.</p></div>
         </div>
         <div class="timeline">
@@ -96,8 +159,8 @@
         <div class="community-copy">
           <p class="eyebrow">Built in public</p>
           <h2>Help shape the world before launch.</h2>
-          <p>Follow development, share feedback, and be there as MMOmon grows from a client into a living community.</p>
-          <a class="button" href="https://discord.gg/US7TzSAjag" target="_blank" rel="noopener noreferrer">Discord</a>
+          <p>Join the MMOmon Discord to follow development, share feedback, and help shape a persistent online monster world before launch.</p>
+          <a class="button" href="https://discord.gg/US7TzSAjag" target="_blank" rel="me noopener noreferrer">Join the MMOmon Discord</a>
         </div>
       </div>
     </section>
@@ -106,7 +169,7 @@
   <footer>
     <div class="shell footer-main">
       <a class="brand" href="/" aria-label="MMOmon home"><img src="assets/mmomon-logo.svg?v=4" alt="" width="40" height="40" loading="lazy" decoding="async"><span>MMO<span>mon</span></span></a>
-      <p>Independent community project. Currently in active development.</p>
+      <p>Independent online monster MMO project currently in active development.</p>
     </div>
     <div class="shell footer-bottom"><span>© MMOmon. All rights reserved.</span><span>mmomon.com</span></div>
   </footer>
