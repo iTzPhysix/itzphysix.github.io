@@ -3,9 +3,9 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://mmomon.com/</loc>
-    <lastmod>2026-07-11</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <image:image>
-      <image:loc>https://mmomon.com/assets/mmomon-social-card.png</image:loc>
+      <image:loc>https://mmomon.com/assets/mmomon-social-card-v2.png</image:loc>
     </image:image>
     <image:image>
       <image:loc>https://mmomon.com/assets/mmomon-logo.svg</image:loc>
