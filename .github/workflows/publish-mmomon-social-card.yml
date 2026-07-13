@@ -1,0 +1,211 @@
+name: Publish MMOmon social card
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/publish-mmomon-social-card.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out site
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install deterministic SVG renderer
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends librsvg2-bin
+
+      - name: Build and validate social image
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p assets
+
+          cat > /tmp/mmomon-social-card.svg <<'SVG'
+          <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+            <defs>
+              <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#08051d"/>
+                <stop offset="0.58" stop-color="#10072b"/>
+                <stop offset="1" stop-color="#071327"/>
+              </linearGradient>
+              <radialGradient id="glow" cx="0.25" cy="0.35" r="0.65">
+                <stop offset="0" stop-color="#6929e8" stop-opacity="0.38"/>
+                <stop offset="1" stop-color="#6929e8" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#9f5cff"/>
+                <stop offset="1" stop-color="#6940e8"/>
+              </linearGradient>
+              <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#000000" flood-opacity="0.48"/>
+              </filter>
+            </defs>
+
+            <rect width="1200" height="630" fill="url(#bg)"/>
+            <rect width="1200" height="630" fill="url(#glow)"/>
+            <path d="M0 480 C260 390 420 590 710 490 C930 414 1040 445 1200 350 L1200 630 L0 630 Z" fill="#0a1730" opacity="0.48"/>
+            <rect x="34" y="34" width="1132" height="562" rx="30" fill="none" stroke="#7243d3" stroke-width="2"/>
+            <rect x="76" y="570" width="1048" height="7" rx="3.5" fill="url(#accent)"/>
+
+            <g transform="translate(90 105)" filter="url(#shadow)">
+              <circle cx="155" cy="180" r="150" fill="#13073d"/>
+              <circle cx="155" cy="180" r="104" fill="none" stroke="#f5f1ff" stroke-width="15"/>
+              <line x1="52" y1="180" x2="258" y2="180" stroke="#f5f1ff" stroke-width="15"/>
+              <circle cx="155" cy="180" r="17" fill="#13073d" stroke="#f5f1ff" stroke-width="6"/>
+              <line x1="61" y1="86" x2="88" y2="113" stroke="#13073d" stroke-width="17"/>
+              <line x1="222" y1="247" x2="249" y2="274" stroke="#13073d" stroke-width="17"/>
+              <line x1="249" y1="86" x2="222" y2="113" stroke="#13073d" stroke-width="17"/>
+              <line x1="88" y1="247" x2="61" y2="274" stroke="#13073d" stroke-width="17"/>
+            </g>
+
+            <g font-family="Arial, Helvetica, sans-serif">
+              <text x="405" y="280" fill="#f7f4ff" font-size="91" font-weight="800" letter-spacing="-5">MMO</text>
+              <text x="619" y="280" fill="#8750f5" font-size="91" font-weight="800" letter-spacing="-5">mon</text>
+              <text x="405" y="351" fill="#d8d2ea" font-size="39" font-weight="400">Play the classic adventure online.</text>
+
+              <rect x="405" y="387" width="570" height="52" rx="26" fill="#1b0c4c" stroke="#8f51ff" stroke-width="2"/>
+              <circle cx="432" cy="413" r="7" fill="#a98dff"/>
+              <text x="455" y="422" fill="#eee9ff" font-size="20" font-weight="700" letter-spacing="0.5">PERSISTENT WORLD  •  ACTIVE DEVELOPMENT</text>
+
+              <text x="405" y="504" fill="#a99fc7" font-size="22">Explore the roadmap and join the community.</text>
+              <text x="405" y="552" fill="#f2effc" font-size="21" font-weight="700">mmomon.com</text>
+            </g>
+          </svg>
+          SVG
+
+          rsvg-convert --format=png --width=1200 --height=630 \
+            /tmp/mmomon-social-card.svg \
+            --output=assets/mmomon-social-card-v2.png
+
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          import struct
+          import zlib
+
+          image_path = Path("assets/mmomon-social-card-v2.png")
+          data = image_path.read_bytes()
+          if data[:8] != b"\x89PNG\r\n\x1a\n":
+              raise SystemExit("Social image is not a PNG")
+
+          position = 8
+          width = height = None
+          saw_iend = False
+          while position < len(data):
+              if position + 12 > len(data):
+                  raise SystemExit("Truncated PNG chunk")
+              length = struct.unpack(">I", data[position:position + 4])[0]
+              kind = data[position + 4:position + 8]
+              start = position + 8
+              end = start + length
+              if end + 4 > len(data):
+                  raise SystemExit("Truncated PNG payload")
+              payload = data[start:end]
+              expected_crc = struct.unpack(">I", data[end:end + 4])[0]
+              actual_crc = zlib.crc32(kind + payload) & 0xFFFFFFFF
+              if expected_crc != actual_crc:
+                  raise SystemExit(f"Invalid PNG CRC in {kind!r}")
+              if kind == b"IHDR":
+                  width, height = struct.unpack(">II", payload[:8])
+              if kind == b"IEND":
+                  saw_iend = True
+                  break
+              position = end + 4
+
+          if (width, height) != (1200, 630) or not saw_iend:
+              raise SystemExit(f"Unexpected image: {width}x{height}; IEND={saw_iend}")
+
+          index_path = Path("index.html")
+          html = index_path.read_text(encoding="utf-8")
+          new_image = "https://mmomon.com/assets/mmomon-social-card-v2.png"
+
+          image_block = re.compile(
+              r'  <meta property="og:image"[^>]*>\n'
+              r'(?:  <meta property="og:image:url"[^>]*>\n)?'
+              r'  <meta property="og:image:secure_url"[^>]*>\n'
+              r'  <meta property="og:image:type"[^>]*>\n'
+              r'  <meta property="og:image:width"[^>]*>\n'
+              r'  <meta property="og:image:height"[^>]*>\n'
+              r'  <meta property="og:image:alt"[^>]*>'
+          )
+          replacement = "\n".join([
+              f'  <meta property="og:image" content="{new_image}">',
+              f'  <meta property="og:image:url" content="{new_image}">',
+              f'  <meta property="og:image:secure_url" content="{new_image}">',
+              '  <meta property="og:image:type" content="image/png">',
+              '  <meta property="og:image:width" content="1200">',
+              '  <meta property="og:image:height" content="630">',
+              '  <meta property="og:image:alt" content="MMOmon — Play the classic adventure online">',
+          ])
+          html, count = image_block.subn(replacement, html, count=1)
+          if count != 1:
+              raise SystemExit("Could not replace the Open Graph image block")
+
+          html = re.sub(
+              r'(<meta name="twitter:image" content=")[^"]+("\s*/?>)',
+              rf'\g<1>{new_image}\2',
+              html,
+              count=1,
+          )
+          html = re.sub(
+              r'(<link rel="image_src" href=")[^"]+("\s*/?>)',
+              rf'\g<1>{new_image}\2',
+              html,
+              count=1,
+          )
+          html = re.sub(
+              r'("image"\s*:\s*")[^"]+("\s*,)',
+              rf'\g<1>{new_image}\2',
+              html,
+              count=1,
+          )
+          html = re.sub(
+              r'("primaryImageOfPage"\s*:\s*\{{.*?"url"\s*:\s*")[^"]+(".*?"width"\s*:\s*)\d+(\s*,\s*"height"\s*:\s*)\d+',
+              rf'\g<1>{new_image}\2' + '1200' + r'\3' + '630',
+              html,
+              count=1,
+              flags=re.S,
+          )
+          html = re.sub(
+              r'(<meta property="og:updated_time" content=")[^"]+("\s*/?>)',
+              r'\g<1>2026-07-13T20:30:00Z\2',
+              html,
+              count=1,
+          )
+
+          if "cdn.jsdelivr.net" in html:
+              raise SystemExit("Stale third-party social-image URL remains")
+          if html.count(f'property="og:image" content="{new_image}"') != 1:
+              raise SystemExit("Expected one primary og:image")
+          if f'name="twitter:image" content="{new_image}"' not in html:
+              raise SystemExit("twitter:image was not updated")
+          if 'name="twitter:card" content="summary_large_image"' not in html:
+              raise SystemExit("twitter:card is not summary_large_image")
+
+          index_path.write_text(html, encoding="utf-8")
+          PY
+
+      - name: Commit published card
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html assets/mmomon-social-card-v2.png
+          if git diff --cached --quiet; then
+            echo "Social card is already current."
+            exit 0
+          fi
+          git commit -m "Publish verified MMOmon social preview"
+          git push
