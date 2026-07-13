@@ -1,3 +1,4 @@
+# One-time publication workflow for the MMOmon Open Graph image.
 name: Publish MMOmon social card
 
 on:
