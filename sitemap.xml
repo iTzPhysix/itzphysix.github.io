@@ -3,12 +3,14 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://mmomon.com/</loc>
-    <lastmod>2026-07-12</lastmod>
+    <lastmod>2026-07-13</lastmod>
     <image:image>
-      <image:loc>https://mmomon.com/assets/mmomon-discord-card.jpg</image:loc>
+      <image:loc>https://mmomon.com/assets/mmomon-social-card-v3.png</image:loc>
+      <image:title>MMOmon — Play the classic adventure online</image:title>
     </image:image>
     <image:image>
       <image:loc>https://mmomon.com/assets/mmomon-logo.svg</image:loc>
+      <image:title>MMOmon logo</image:title>
     </image:image>
   </url>
 </urlset>
