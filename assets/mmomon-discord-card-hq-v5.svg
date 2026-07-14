@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#17073f"/>
+      <stop offset="0.55" stop-color="#10082f"/>
+      <stop offset="1" stop-color="#10214f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.22" cy="0.48" r="0.58">
+      <stop offset="0" stop-color="#6f24dc" stop-opacity="0.48"/>
+      <stop offset="1" stop-color="#6f24dc" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#9d54ff"/>
+      <stop offset="1" stop-color="#7942f4"/>
+    </linearGradient>
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#03010b" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <path d="M0 466 L1200 365 L1200 630 L0 630 Z" fill="#040a1d"/>
+
+  <g opacity="0.28" stroke="#514194" stroke-width="1">
+    <path d="M660 50V370M705 50V370M750 50V370M795 50V370M840 50V370M885 50V370M930 50V370M975 50V370M1020 50V370M1065 50V370M1110 50V370M1155 50V370"/>
+    <path d="M660 95H1160M660 140H1160M660 185H1160M660 230H1160M660 275H1160M660 320H1160M660 365H1160"/>
+  </g>
+
+  <rect x="42" y="42" width="1116" height="546" rx="28" fill="none" stroke="#8650f4" stroke-width="3"/>
+  <rect x="74" y="552" width="1052" height="14" rx="7" fill="url(#accent)"/>
+
+  <g transform="translate(98 150) scale(3)" filter="url(#softShadow)">
+    <circle fill="#120042" cx="51.45" cy="51.45" r="51.45"/>
+    <circle fill="#fff" cx="51.28" cy="51.45" r="47.17"/>
+    <circle fill="#120042" cx="51.45" cy="51.45" r="40.48"/>
+    <rect fill="#120042" x="2.18" y="48.9" width="98.93" height="6.61" transform="translate(125.08 52.6) rotate(135)"/>
+    <rect fill="#120042" x="2.13" y="48.78" width="98.58" height="6.61" transform="translate(51.89 -21.11) rotate(45)"/>
+    <rect fill="#fff" x="5.58" y="48.95" width="91.15" height="6.61"/>
+    <circle fill="#fff" cx="51.28" cy="51.45" r="7.1"/>
+    <circle fill="#120042" cx="51.28" cy="51.45" r="5.32"/>
+    <circle fill="#fff" cx="51.28" cy="51.45" r="3.71"/>
+  </g>
+
+  <g font-family="Inter, Arial, Helvetica, sans-serif">
+    <text x="450" y="268" font-size="86" font-weight="800" letter-spacing="-4" fill="#faf8ff">MMO</text>
+    <text x="660" y="268" font-size="86" font-weight="800" letter-spacing="-4" fill="#9a55ff">mon</text>
+    <text x="450" y="326" font-size="35" font-weight="500" fill="#ddd7ef">Play the classic adventure online.</text>
+
+    <rect x="450" y="375" width="540" height="60" rx="30" fill="#1b0a4f" stroke="#8f52ff" stroke-width="2"/>
+    <circle cx="483" cy="405" r="9" fill="#b796ff"/>
+    <text x="507" y="414" font-size="20" font-weight="700" fill="#f7f3ff">PERSISTENT WORLD  •  ACTIVE DEVELOPMENT</text>
+
+    <text x="450" y="502" font-size="23" font-weight="400" fill="#aaa1c6">Explore the roadmap and join the community.</text>
+    <text x="450" y="539" font-size="23" font-weight="700" fill="#f6f2ff">mmomon.com</text>
+  </g>
+</svg>
