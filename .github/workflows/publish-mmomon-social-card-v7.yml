@@ -1,0 +1,117 @@
+name: Publish MMOmon social card v7
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - assets/mmomon-discord-card-hq-v7.svg
+      - .github/workflows/publish-mmomon-social-card-v7.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install deterministic SVG renderer
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends librsvg2-bin
+
+      - name: Render and validate image
+        shell: bash
+        run: |
+          set -euo pipefail
+          rsvg-convert \
+            --format=png \
+            --width=1200 \
+            --height=630 \
+            assets/mmomon-discord-card-hq-v7.svg \
+            --output=assets/mmomon-discord-card-hq-v7.png
+
+          python3 - <<'PY'
+          from pathlib import Path
+          import struct
+          import zlib
+
+          path = Path('assets/mmomon-discord-card-hq-v7.png')
+          data = path.read_bytes()
+          if data[:8] != b'\x89PNG\r\n\x1a\n':
+              raise SystemExit('Rendered file is not a PNG')
+
+          pos = 8
+          width = height = None
+          saw_iend = False
+          while pos < len(data):
+              if pos + 12 > len(data):
+                  raise SystemExit('Truncated PNG chunk')
+              length = struct.unpack('>I', data[pos:pos + 4])[0]
+              kind = data[pos + 4:pos + 8]
+              start = pos + 8
+              end = start + length
+              if end + 4 > len(data):
+                  raise SystemExit('Truncated PNG payload')
+              payload = data[start:end]
+              expected = struct.unpack('>I', data[end:end + 4])[0]
+              actual = zlib.crc32(kind + payload) & 0xffffffff
+              if expected != actual:
+                  raise SystemExit(f'Invalid PNG CRC in {kind!r}')
+              if kind == b'IHDR':
+                  width, height = struct.unpack('>II', payload[:8])
+              if kind == b'IEND':
+                  saw_iend = True
+                  break
+              pos = end + 4
+
+          if (width, height) != (1200, 630) or not saw_iend:
+              raise SystemExit(f'Invalid output: {width}x{height}; IEND={saw_iend}')
+          if len(data) < 100000:
+              raise SystemExit(f'Unexpectedly small PNG: {len(data)} bytes')
+          print(f'Validated {path}: {width}x{height}, {len(data)} bytes')
+          PY
+
+      - name: Update website metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          old = 'https://mmomon.com/assets/mmomon-discord-card-hq-v6.jpg'
+          new = 'https://mmomon.com/assets/mmomon-discord-card-hq-v7.png'
+
+          index = Path('index.html')
+          html = index.read_text(encoding='utf-8')
+          if old not in html:
+              raise SystemExit('Expected v6 image URL not found in index.html')
+          html = html.replace(old, new)
+          html = html.replace('content="image/jpeg"', 'content="image/png"')
+          html = html.replace('content="2026-07-15T05:00:00Z"', 'content="2026-07-15T06:15:00Z"')
+          index.write_text(html, encoding='utf-8')
+
+          sitemap = Path('sitemap.xml')
+          xml = sitemap.read_text(encoding='utf-8')
+          if old not in xml:
+              raise SystemExit('Expected v6 image URL not found in sitemap.xml')
+          sitemap.write_text(xml.replace(old, new), encoding='utf-8')
+          PY
+
+      - name: Commit validated image and metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/mmomon-discord-card-hq-v7.png index.html sitemap.xml
+          if git diff --cached --quiet; then
+            echo 'No changes to publish.'
+            exit 0
+          fi
+          git commit -m 'Use validated MMOmon Discord preview v7'
+          git push
