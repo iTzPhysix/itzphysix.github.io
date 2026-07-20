@@ -2,7 +2,9 @@
   'use strict';
   const API_BASE = 'https://api.mmomon.com';
   const dialog = document.querySelector('[data-account-dialog]');
-  const openButton = document.querySelector('[data-account-open]');
+  const openButtons = [...document.querySelectorAll('[data-account-open]')];
+  const signInButton = document.querySelector('[data-account-open="login"]');
+  const signUpButton = document.querySelector('[data-account-open="register"]');
   const closeButton = document.querySelector('[data-account-close]');
   const status = document.querySelector('[data-account-status]');
   const sessionPanel = document.querySelector('[data-account-session]');
@@ -25,7 +27,9 @@
     sessionPanel.hidden = !signedIn;
     forms.forEach(form => { form.hidden = signedIn || form.dataset.authForm !== activeTab(); });
     tabs.forEach(tab => { tab.hidden = signedIn; });
-    openButton.classList.toggle('is-authenticated', signedIn);
+    signInButton?.classList.toggle('is-authenticated', signedIn);
+    if (signInButton) signInButton.textContent = signedIn ? (accountName.textContent || 'Account') : 'Sign in';
+    if (signUpButton) signUpButton.hidden = signedIn;
   }
 
   function selectTab(name) {
@@ -92,7 +96,6 @@
       const result = await api(path, body);
       signedIn = true;
       accountName.textContent = result.displayName || data.displayName || data.username;
-      openButton.textContent = accountName.textContent;
       form.reset();
       render();
       setStatus(kind === 'register'
@@ -105,10 +108,11 @@
     }
   }
 
-  openButton?.addEventListener('click', () => {
+  openButtons.forEach(button => button.addEventListener('click', () => {
+    if (!signedIn) selectTab(button.dataset.accountOpen || 'login');
     if (typeof dialog?.showModal === 'function') dialog.showModal();
     else dialog?.setAttribute('open', '');
-  });
+  }));
   closeButton?.addEventListener('click', () => dialog?.close());
   dialog?.addEventListener('click', event => {
     if (event.target === dialog) dialog.close();
@@ -121,7 +125,6 @@
   logoutButton?.addEventListener('click', () => {
     signedIn = false;
     accountName.textContent = '';
-    openButton.textContent = 'Account';
     selectTab('login');
     setStatus('Website sign-in cleared.');
   });
