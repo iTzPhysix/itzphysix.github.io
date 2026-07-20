@@ -69,8 +69,8 @@
   }
 
   function errorMessage(error) {
-    if (error?.message === 'username_unavailable') return 'That username is already taken.';
-    if (error?.message === 'invalid_credentials') return 'The username or password is incorrect.';
+    if (error?.message === 'email_unavailable') return 'An account already exists for that email.';
+    if (error?.message === 'invalid_credentials') return 'The email or password is incorrect.';
     if (error?.message === 'rate_limited') return 'Too many attempts. Try again in about a minute.';
     if (error?.message === 'bad_request') return 'Check the fields and try again.';
     if (error?.message === 'request_timeout') return 'The account server did not respond in time.';
@@ -91,16 +91,16 @@
     try {
       const path = kind === 'register' ? '/v1/auth/register' : '/v1/auth/login';
       const body = kind === 'register'
-        ? { username: data.username, displayName: data.displayName, password: data.password }
-        : { username: data.username, password: data.password };
+        ? { email: data.email, password: data.password }
+        : { email: data.email, password: data.password };
       const result = await api(path, body);
       signedIn = true;
-      accountName.textContent = result.displayName || data.displayName || data.username;
+      accountName.textContent = result.email || data.email;
       form.reset();
       render();
       setStatus(kind === 'register'
-        ? 'Account created. Use the same login in the MMOmon client.'
-        : 'Sign-in verified. Use the same login in the MMOmon client.');
+        ? 'Account created. Use the same email and password in the MMOmon client, then choose your profile name in-game.'
+        : 'Sign-in verified. Use the same email and password in the MMOmon client.');
     } catch (error) {
       setStatus(errorMessage(error), true);
     } finally {

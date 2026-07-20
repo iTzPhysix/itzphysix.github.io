@@ -207,7 +207,7 @@
       <button class="account-close" type="button" data-account-close aria-label="Close account window">&times;</button>
       <p class="eyebrow">MMOmon account</p>
       <h2 id="account-title">Your account follows you into the game.</h2>
-      <p class="account-intro">Create one MMOmon account for the website and game client. Passwords are sent only to the encrypted MMOmon API.</p>
+      <p class="account-intro">Create one MMOmon account with your email and password. Choose your profile name inside the game client.</p>
 
       <div class="account-tabs" role="tablist" aria-label="Account action">
         <button type="button" role="tab" aria-selected="true" data-auth-tab="login">Sign in</button>
@@ -217,14 +217,13 @@
       <p class="account-status" data-account-status role="status" aria-live="polite"></p>
 
       <form class="account-form" data-auth-form="login">
-        <label>Username<input name="username" autocomplete="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_-]{3,24}" required></label>
+        <label>Email<input name="email" type="email" autocomplete="email" maxlength="254" required></label>
         <label>Password<input name="password" type="password" autocomplete="current-password" minlength="10" maxlength="128" required></label>
         <button class="account-submit" type="submit">Sign in</button>
       </form>
 
       <form class="account-form" data-auth-form="register" hidden>
-        <label>Username<input name="username" autocomplete="username" minlength="3" maxlength="24" pattern="[A-Za-z0-9_-]{3,24}" required></label>
-        <label>Display name<input name="displayName" autocomplete="nickname" minlength="3" maxlength="32" pattern="[A-Za-z0-9 _-]{3,32}" required></label>
+        <label>Email<input name="email" type="email" autocomplete="email" maxlength="254" required></label>
         <label>Password<input name="password" type="password" autocomplete="new-password" minlength="10" maxlength="128" required></label>
         <label>Confirm password<input name="confirmPassword" type="password" autocomplete="new-password" minlength="10" maxlength="128" required></label>
         <button class="account-submit" type="submit">Create account</button>
@@ -232,14 +231,14 @@
 
       <section class="account-session" data-account-session hidden>
         <p>Signed in as <strong data-account-name></strong>.</p>
-        <p>Your game client can use the same username and password.</p>
+        <p>Use the same email and password in the MMOmon client. Your profile name is chosen in-game.</p>
         <button class="account-submit account-logout" type="button" data-account-logout>Use another account</button>
       </section>
 
-      <p class="account-note">The website does not retain your password or game-client session token. Use the same username and password in the MMOmon client.</p>
+      <p class="account-note">The website does not retain your password or game-client session token. Your account uses email and password; profile names are created in-game.</p>
     </div>
   </dialog>
 
-  <script src="script.js?v=374" defer></script>
+  <script src="script.js?v=375" defer></script>
 </body>
 </html>
