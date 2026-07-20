@@ -106,9 +106,11 @@
     const url = new URL(location.href);
     const handoff = url.searchParams.get('discord');
     const oauthError = url.searchParams.get('discordError');
-    if (!handoff && !oauthError) return null;
+    const oauthWarning = url.searchParams.get('discordWarning');
+    if (!handoff && !oauthError && !oauthWarning) return null;
     url.searchParams.delete('discord');
     url.searchParams.delete('discordError');
+    url.searchParams.delete('discordWarning');
     history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
     if (oauthError) {
       const error = new Error(oauthError);
@@ -117,7 +119,7 @@
     }
     const result = await api('/v1/auth/discord/complete', { body: { token: handoff } });
     setSession(result);
-    return result;
+    return { ...result, warning: oauthWarning || '' };
   }
 
   window.MMOmonAccount = { API_BASE, api, readSession, setSession, clearSession, loadProfile, logout, startDiscord, completeDiscordFromUrl };

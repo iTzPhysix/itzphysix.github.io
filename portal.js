@@ -36,7 +36,9 @@
     if (code === 'discord_auth_unavailable' || code === 'unavailable') return 'Discord linking is ready in code but still needs the Discord application credentials.';
     if (code === 'discord_already_linked') return 'That Discord account is linked to another MMOmon account.';
     if (code === 'email_login_required_before_unlink') return 'Add an email and password before unlinking Discord.';
-    if (code === 'discord_guild_join_failed') return 'The Discord bot could not add this account to the MMOmon server.';
+    if (code === 'discord_guild_join_failed') return 'Discord linking could not complete the server join step.';
+    if (code === 'discord_role_sync_failed') return 'Discord is linked, but the MMOmon Linked role could not be assigned. Check the bot role hierarchy and try Sync MMOmon Linked again.';
+    if (code === 'discord_server_join_required') return 'Discord is linked. Join the MMOmon Discord, then return here and click Sync MMOmon Linked.';
     if (code === 'access_denied' || code === 'cancelled') return 'Discord authorization was cancelled.';
     if (code === 'request_timeout') return 'The account server did not respond in time.';
     return 'The account request could not be completed. Try again shortly.';
@@ -123,7 +125,9 @@
       const discordResult = await Account.completeDiscordFromUrl();
       if (discordResult) {
         session = Account.readSession();
-        setStatus(discordResult.createdAccount ? 'Discord account created and linked.' : 'Discord linked successfully.');
+        if (discordResult.warning === 'discord_server_join_required') setStatus('Discord linked. Join the MMOmon Discord below, then click Sync MMOmon Linked.');
+        else if (discordResult.warning === 'discord_role_sync_failed') setStatus('Discord linked, but the MMOmon Linked role could not be assigned. Check the bot role hierarchy, then click Sync MMOmon Linked.');
+        else setStatus(discordResult.createdAccount ? 'Discord account created and linked.' : 'Discord linked successfully. MMOmon Linked was synchronized.');
       }
       const url = new URL(location.href), emailChange = url.searchParams.get('emailChange');
       if (emailChange) {
@@ -162,7 +166,7 @@
   });
 
   document.querySelector('[data-discord-link]')?.addEventListener('click', async event => { event.currentTarget.disabled = true; setStatus('Opening Discord…'); try { await Account.startDiscord('link', '/settings/'); } catch (error) { event.currentTarget.disabled = false; setStatus(errorMessage(error), true); } });
-  document.querySelector('[data-discord-sync]')?.addEventListener('click', async event => { const local = document.querySelector('[data-discord-message]'); event.currentTarget.disabled = true; setLocalStatus(local, 'Synchronizing profile roles…'); try { const result = await Account.api('/v1/account/discord/sync', { body: {}, token: session.token }); const summary = result.configured ? `Roles synchronized. Added: ${result.assigned.join(', ') || 'none'}.` : 'Discord is linked. Custom role IDs have not been configured yet.'; setLocalStatus(local, summary); } catch (error) { setLocalStatus(local, errorMessage(error), true); } finally { event.currentTarget.disabled = false; } });
+  document.querySelector('[data-discord-sync]')?.addEventListener('click', async event => { const local = document.querySelector('[data-discord-message]'); event.currentTarget.disabled = true; setLocalStatus(local, 'Synchronizing MMOmon Linked...'); try { const result = await Account.api('/v1/account/discord/sync', { body: {}, token: session.token }); if (!result.success) { setLocalStatus(local, 'MMOmon Linked could not be assigned. Confirm you joined the server and that the bot role is above MMOmon Linked, then try again.', true); } else { const summary = result.configured ? `MMOmon Linked synchronized. Added: ${result.assigned.join(', ') || 'already assigned'}.` : 'Discord is linked, but the MMOmon Linked role rule is not configured.'; setLocalStatus(local, summary); } } catch (error) { setLocalStatus(local, errorMessage(error), true); } finally { event.currentTarget.disabled = false; } });
   document.querySelector('[data-discord-unlink]')?.addEventListener('click', async event => { event.currentTarget.disabled = true; try { await Account.api('/v1/account/discord/unlink', { body: {}, token: session.token }); setStatus('Discord unlinked.'); profile = await Account.loadProfile(); renderSettingsPage(profile); } catch (error) { setStatus(errorMessage(error), true); event.currentTarget.disabled = false; } });
   profileButton?.addEventListener('click', event => { event.stopPropagation(); toggleMenu(); });
   profileMenu?.addEventListener('click', event => event.stopPropagation());
