@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#09061d"><meta name="color-scheme" content="dark"><meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://mmomon-edge-authority.ajis90.workers.dev; img-src 'self' data:; style-src 'self'; script-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+  <meta name="robots" content="noindex,follow"><title>Your MMOmon Profile</title>
+  <link rel="icon" href="/favicon.ico?v=258"><link rel="stylesheet" href="/styles.css?v=12"><link rel="stylesheet" href="/account-portal.css?v=1">
+</head>
+<body class="portal-body" data-portal-page="profile">
+  <header class="portal-header"><div class="portal-nav">
+    <a class="brand" href="/" aria-label="MMOmon home"><img src="/assets/mmomon-logo.svg?v=4" alt="" width="44" height="44"><span>MMO<span>mon</span></span></a>
+    <div class="profile-control" data-profile-control hidden>
+      <button class="account-profile-button" type="button" data-account-profile aria-haspopup="menu" aria-expanded="false" aria-label="Open account menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12.25a4.75 4.75 0 1 0 0-9.5 4.75 4.75 0 0 0 0 9.5Zm0 2c-4.55 0-8.25 2.58-8.25 5.75 0 .69.56 1.25 1.25 1.25h14c.69 0 1.25-.56 1.25-1.25 0-3.17-3.7-5.75-8.25-5.75Z"/></svg><span class="account-profile-status"></span></button>
+      <div class="profile-dropdown" data-profile-menu role="menu" hidden><div class="profile-dropdown-head"><span class="profile-dropdown-avatar"><svg viewBox="0 0 24 24"><path d="M12 12.25a4.75 4.75 0 1 0 0-9.5 4.75 4.75 0 0 0 0 9.5Zm0 2c-4.55 0-8.25 2.58-8.25 5.75 0 .69.56 1.25 1.25 1.25h14c.69 0 1.25-.56 1.25-1.25 0-3.17-3.7-5.75-8.25-5.75Z"/></svg></span><span class="profile-dropdown-copy"><span class="profile-dropdown-label">MMOmon account</span><strong class="profile-dropdown-email" data-profile-identity>Signed in</strong></span></div><nav class="profile-dropdown-nav"><a class="profile-dropdown-item" href="/profile/">Profile</a><a class="profile-dropdown-item" href="/settings/">Settings</a><button class="profile-dropdown-item is-danger" type="button" data-profile-logout>Sign out</button></nav></div>
+    </div>
+  </div></header>
+  <main class="portal-main">
+    <a class="portal-back" href="/">← MMOmon home</a><p class="portal-kicker">Trainer overview</p><h1 class="portal-title">Your adventures at a glance.</h1><p class="portal-lead">Profiles are created in the game client. This page turns your synced MMOmon progress into a quick account overview.</p>
+    <p class="portal-status" data-portal-status hidden></p>
+    <section class="portal-grid" data-stats-grid hidden>
+      <article class="stat-card"><span class="stat-label">Trainer profiles</span><strong class="stat-value" data-stat="characters">0</strong></article>
+      <article class="stat-card"><span class="stat-label">Regions started</span><strong class="stat-value" data-stat="regions">0</strong></article>
+      <article class="stat-card"><span class="stat-label">Combined money</span><strong class="stat-value" data-stat="money">0</strong></article>
+      <article class="stat-card"><span class="stat-label">Johto trainers</span><strong class="stat-value" data-stat="johto">0</strong></article>
+      <article class="stat-card"><span class="stat-label">Kanto trainers</span><strong class="stat-value" data-stat="kanto">0</strong></article>
+      <article class="stat-card"><span class="stat-label">Checkpoint milestones</span><strong class="stat-value" data-stat="checkpoints">0</strong></article>
+    </section>
+    <section class="portal-section"><div class="portal-section-head"><div><h2>Game profiles</h2><p>Your synced trainer names, regions, and latest world checkpoints.</p></div><a class="portal-button portal-button-secondary" href="/settings/">Account settings</a></div><div class="profiles-grid" data-profiles-grid><div class="empty-state">Sign in to view your MMOmon profiles.</div></div></section>
+  </main>
+  <script src="/account-client.js?v=1" defer></script><script src="/portal.js?v=1" defer></script>
+</body></html>
