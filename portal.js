@@ -108,11 +108,10 @@
     document.querySelector('[data-email-card-copy]').textContent = emailAvailable
       ? (account.emailLinked ? 'Send a one-time confirmation link to your new email address.' : 'Add a verified email and password so you can use either Discord or email sign-in.')
       : 'Email changes are implemented but remain unavailable until MMOmon outbound account email is activated.';
-    const discordFeature = config?.features?.discord || {}, link = document.querySelector('[data-discord-link]'), sync = document.querySelector('[data-discord-sync]'), unlink = document.querySelector('[data-discord-unlink]');
+    const discordFeature = config?.features?.discord || {}, link = document.querySelector('[data-discord-link]'), unlink = document.querySelector('[data-discord-unlink]');
     link.hidden = account.discordLinked;
     link.disabled = !discordFeature.enabled;
     link.textContent = discordFeature.enabled ? 'Link Discord' : 'Discord setup required';
-    sync.hidden = !account.discordLinked;
     unlink.hidden = !account.discordLinked || !account.emailLinked;
     const emailSubmit = document.querySelector('[data-email-form] button[type="submit"]');
     emailSubmit.disabled = !emailAvailable;
@@ -125,9 +124,9 @@
       const discordResult = await Account.completeDiscordFromUrl();
       if (discordResult) {
         session = Account.readSession();
-        if (discordResult.warning === 'discord_server_join_required') setStatus('Discord linked. Join the MMOmon Discord below, then click Sync MMOmon Linked.');
-        else if (discordResult.warning === 'discord_role_sync_failed') setStatus('Discord linked, but the MMOmon Linked role could not be assigned. Check the bot role hierarchy, then click Sync MMOmon Linked.');
-        else setStatus(discordResult.createdAccount ? 'Discord account created and linked.' : 'Discord linked successfully. MMOmon Linked was synchronized.');
+        if (discordResult.warning === 'discord_server_join_required') setStatus('Discord linked, but automatic server joining needs administrator attention.', true);
+        else if (discordResult.warning) setStatus('Discord linked, but Discord Linked could not be assigned automatically. The server administrator has been notified.', true);
+        else setStatus(discordResult.createdAccount ? 'Discord account created, server joined, and Discord Linked assigned.' : 'Discord linked and Discord Linked assigned automatically.');
       }
       const url = new URL(location.href), emailChange = url.searchParams.get('emailChange');
       if (emailChange) {
@@ -166,7 +165,6 @@
   });
 
   document.querySelector('[data-discord-link]')?.addEventListener('click', async event => { event.currentTarget.disabled = true; setStatus('Opening Discord…'); try { await Account.startDiscord('link', '/settings/'); } catch (error) { event.currentTarget.disabled = false; setStatus(errorMessage(error), true); } });
-  document.querySelector('[data-discord-sync]')?.addEventListener('click', async event => { const local = document.querySelector('[data-discord-message]'); event.currentTarget.disabled = true; setLocalStatus(local, 'Synchronizing MMOmon Linked...'); try { const result = await Account.api('/v1/account/discord/sync', { body: {}, token: session.token }); if (!result.success) { setLocalStatus(local, 'MMOmon Linked could not be assigned. Confirm you joined the server and that the bot role is above MMOmon Linked, then try again.', true); } else { const summary = result.configured ? `MMOmon Linked synchronized. Added: ${result.assigned.join(', ') || 'already assigned'}.` : 'Discord is linked, but the MMOmon Linked role rule is not configured.'; setLocalStatus(local, summary); } } catch (error) { setLocalStatus(local, errorMessage(error), true); } finally { event.currentTarget.disabled = false; } });
   document.querySelector('[data-discord-unlink]')?.addEventListener('click', async event => { event.currentTarget.disabled = true; try { await Account.api('/v1/account/discord/unlink', { body: {}, token: session.token }); setStatus('Discord unlinked.'); profile = await Account.loadProfile(); renderSettingsPage(profile); } catch (error) { setStatus(errorMessage(error), true); event.currentTarget.disabled = false; } });
   profileButton?.addEventListener('click', event => { event.stopPropagation(); toggleMenu(); });
   profileMenu?.addEventListener('click', event => event.stopPropagation());
