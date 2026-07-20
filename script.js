@@ -112,6 +112,7 @@
     if (!signedIn) selectTab(button.dataset.accountOpen || 'login');
     if (typeof dialog?.showModal === 'function') dialog.showModal();
     else dialog?.setAttribute('open', '');
+    if (dialog) dialog.scrollTop = 0;
   }));
   closeButton?.addEventListener('click', () => dialog?.close());
   dialog?.addEventListener('click', event => {
