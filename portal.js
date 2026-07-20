@@ -115,6 +115,8 @@
     unlink.hidden = !account.discordLinked || !account.emailLinked;
     const emailSubmit = document.querySelector('[data-email-form] button[type="submit"]');
     emailSubmit.disabled = !emailAvailable;
+    const passwordAvailable = Boolean(config?.features?.passwordChangeVerification), passwordSubmit = document.querySelector('[data-password-form] button[type="submit"]');
+    if (passwordSubmit) passwordSubmit.disabled = !passwordAvailable;
   }
 
   async function load() {
@@ -128,12 +130,18 @@
         else if (discordResult.warning) setStatus('Discord linked, but Discord Linked could not be assigned automatically. The server administrator has been notified.', true);
         else setStatus(discordResult.createdAccount ? 'Discord account created, server joined, and Discord Linked assigned.' : 'Discord linked and Discord Linked assigned automatically.');
       }
-      const url = new URL(location.href), emailChange = url.searchParams.get('emailChange');
+      const url = new URL(location.href), emailChange = url.searchParams.get('emailChange'), passwordChange = url.searchParams.get('passwordChange');
       if (emailChange) {
         url.searchParams.delete('emailChange'); history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
         setStatus('Confirming your email change…');
         const result = await Account.api('/v1/account/email-change/confirm', { body: { token: emailChange } });
         session = Account.setSession(result); setStatus('Email sign-in updated successfully.');
+      }
+      if (passwordChange) {
+        url.searchParams.delete('passwordChange'); history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
+        setStatus('Confirming your password change…');
+        const result = await Account.api('/v1/account/password/confirm', { body: { token: passwordChange } });
+        session = Account.setSession(result); setStatus('Password changed. Other sessions were signed out.');
       }
     } catch (error) { setStatus(errorMessage(error), true); }
     renderNav();
@@ -158,10 +166,10 @@
   document.querySelector('[data-password-form]')?.addEventListener('submit', async event => {
     event.preventDefault(); const form = event.currentTarget, values = Object.fromEntries(new FormData(form));
     if (values.newPassword !== values.confirmPassword) { setStatus('The passwords do not match.', true); return; }
-    const button = form.querySelector('button[type="submit"]'); button.disabled = true; setStatus('Changing password…');
-    try { const result = await Account.api('/v1/account/password', { body: values, token: session.token }); session = Account.setSession(result); form.reset(); setStatus('Password changed. Other sessions were signed out.'); }
+    const button = form.querySelector('button[type="submit"]'); button.disabled = true; setStatus('Sending password confirmation email…');
+    try { await Account.api('/v1/account/password', { body: values, token: session.token }); form.reset(); setStatus('Check your verified email for a one-time password-change confirmation link.'); }
     catch (error) { setStatus(errorMessage(error), true); }
-    finally { button.disabled = false; }
+    finally { button.disabled = !Boolean(config?.features?.passwordChangeVerification); }
   });
 
   document.querySelector('[data-discord-link]')?.addEventListener('click', async event => { event.currentTarget.disabled = true; setStatus('Opening Discord…'); try { await Account.startDiscord('link', '/settings/'); } catch (error) { event.currentTarget.disabled = false; setStatus(errorMessage(error), true); } });
