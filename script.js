@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const API_BASE = 'https://api.mmomon.com';
+  const API_BASE = 'https://mmomon-edge-authority.ajis90.workers.dev';
   const dialog = document.querySelector('[data-account-dialog]');
   const openButtons = [...document.querySelectorAll('[data-account-open]')];
   const signInButton = document.querySelector('[data-account-open="login"]');
@@ -13,6 +13,7 @@
   const tabs = [...document.querySelectorAll('[data-auth-tab]')];
   const forms = [...document.querySelectorAll('[data-auth-form]')];
   let signedIn = false;
+  let sessionToken = '';
 
   function setStatus(message = '', isError = false) {
     status.textContent = message;
@@ -39,13 +40,13 @@
     setStatus('');
   }
 
-  async function api(path, body) {
+  async function api(path, body, token = '') {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 15000);
     try {
       const response = await fetch(`${API_BASE}${path}`, {
         method: 'POST',
-        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
         body: JSON.stringify(body),
         credentials: 'omit',
         mode: 'cors',
@@ -71,7 +72,9 @@
   function errorMessage(error) {
     if (error?.message === 'email_unavailable') return 'An account already exists for that email.';
     if (error?.message === 'invalid_credentials') return 'The email or password is incorrect.';
-    if (error?.message === 'rate_limited') return 'Too many attempts. Try again in about a minute.';
+    if (error?.message === 'rate_limited') return 'Too many attempts. Try again in 15 minutes.';
+    if (error?.message === 'invalid_email') return 'Enter a valid email address.';
+    if (error?.message === 'invalid_password') return 'Use a password between 10 and 128 characters.';
     if (error?.message === 'bad_request') return 'Check the fields and try again.';
     if (error?.message === 'request_timeout') return 'The account server did not respond in time.';
     return 'Could not reach the MMOmon account server. Try again shortly.';
@@ -95,6 +98,7 @@
         : { email: data.email, password: data.password };
       const result = await api(path, body);
       signedIn = true;
+      sessionToken = result.token || '';
       accountName.textContent = result.email || data.email;
       form.reset();
       render();
@@ -123,10 +127,16 @@
     event.preventDefault();
     submitAuth(form);
   }));
-  logoutButton?.addEventListener('click', () => {
+  logoutButton?.addEventListener('click', async () => {
+    const token = sessionToken;
+    sessionToken = '';
     signedIn = false;
     accountName.textContent = '';
     selectTab('login');
+    if (token) {
+      try { await api('/v1/auth/logout', {}, token); }
+      catch { /* The local website session is already cleared. */ }
+    }
     setStatus('Website sign-in cleared.');
   });
 
