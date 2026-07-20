@@ -5,6 +5,7 @@
   const openButtons = [...document.querySelectorAll('[data-account-open]')];
   const signInButton = document.querySelector('[data-account-open="login"]');
   const signUpButton = document.querySelector('[data-account-open="register"]');
+  const profileButton = document.querySelector('[data-account-profile]');
   const closeButton = document.querySelector('[data-account-close]');
   const status = document.querySelector('[data-account-status]');
   const sessionPanel = document.querySelector('[data-account-session]');
@@ -39,9 +40,14 @@
       tab.hidden = signedIn || !['login', 'register'].includes(activeView);
       tab.setAttribute('aria-selected', String(tab.dataset.authTab === activeView));
     });
-    signInButton?.classList.toggle('is-authenticated', signedIn);
-    if (signInButton) signInButton.textContent = signedIn ? (accountName.textContent || 'Account') : 'Sign in';
+    if (signInButton) signInButton.hidden = signedIn;
     if (signUpButton) signUpButton.hidden = signedIn;
+    if (profileButton) {
+      profileButton.hidden = !signedIn;
+      const email = accountName?.textContent?.trim() || '';
+      profileButton.setAttribute('aria-label', email ? `Open profile for ${email}` : 'Open account profile');
+      profileButton.title = email ? `Account: ${email}` : 'Account profile';
+    }
     if (forgotButton) forgotButton.hidden = !emailFeatures.reset || activeView !== 'login';
   }
 
@@ -210,6 +216,10 @@
     if (!signedIn) selectView(button.dataset.accountOpen || 'login');
     showDialog();
   }));
+  profileButton?.addEventListener('click', () => {
+    if (!signedIn) selectView('login');
+    showDialog();
+  });
   closeButton?.addEventListener('click', () => dialog?.close());
   dialog?.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
   tabs.forEach(tab => tab.addEventListener('click', () => selectView(tab.dataset.authTab)));
